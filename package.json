@@ -1,0 +1,7 @@
+{
+  "name": "onestep-frontend",
+  "version": "1.0.0",
+  "devDependencies": {
+    "netlify-build-plugin-flutter": "latest"
+  }
+}
