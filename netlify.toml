@@ -1,3 +1,7 @@
 [build]
 publish = "build/web"
 command = "bash netlify_build.sh"
+
+[build.environment]
+FLUTTER_VERSION = "3.35.1"
+API_BASE_URL = "https://onestep-backend-production-9ac1.up.railway.app"
