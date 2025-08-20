@@ -24,4 +24,4 @@ flutter build web --release --pwa-strategy=none \
 # If your publish dir in netlify.toml is "build/web" at repo root, move output up:
 cd ..
 rm -rf build && mkdir -p build
-cp -r one_step_app_frontend/build/web build/web
+cp -r onestep-frontend/build/web build/web
