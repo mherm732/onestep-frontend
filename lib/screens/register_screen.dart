@@ -23,7 +23,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 Future<String?> registerUser(String name, String email, String password) async {
   const String baseUrl = Environment.apiBaseUrl; 
+  print('API_BASE_URL=${Environment.apiBaseUrl}');
   final Uri url = Uri.parse('$baseUrl/api/auth/register');
+  print('POST -> $url');
 
   try {
     print('sending POST request to url');
