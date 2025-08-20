@@ -12,7 +12,7 @@ flutter --version
 flutter config --no-analytics
 
 # 3) Go to your Flutter web app folder (adjust if different)
-cd one_step_app_frontend
+cd onestep-frontend
 
 # 4) Build
 flutter pub get
