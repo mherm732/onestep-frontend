@@ -82413,7 +82413,7 @@ if(o==null){p.c.a5(t.J).f.fX(B.yH)
 s=1
 break}n=t.N
 m=A.ae(["title",p.e.a.a,"goalDescription",p.f.a.a,"goalStatus","IN_PROGRESS"],n,n)
-l=A.dx("https://your-backend.up.railway.app/api/goals/create")
+l=A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/goals/create")
 n=A.ae(["Authorization","Bearer "+o,"Content-Type","application/json"],n,n)
 s=4
 return A.N(A.XZ(l,B.aE.tX(m,null),n),$async$t1)
@@ -82477,7 +82477,7 @@ break}A.ch("Using token: "+i)
 p=4
 i=t.N
 s=7
-return A.N(A.XV(A.dx("https://your-backend.up.railway.app/api/goals/user"),A.ae(["Authorization","Bearer "+A.k(n.d),"Content-Type","application/json"],i,i)),$async$yL)
+return A.N(A.XV(A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/goals/user"),A.ae(["Authorization","Bearer "+A.k(n.d),"Content-Type","application/json"],i,i)),$async$yL)
 case 7:m=b
 A.ch("GET /api/goals/user response status: "+m.b)
 i=m
@@ -82592,7 +82592,7 @@ s=1
 break}k=p.b
 n=t.N
 s=5
-return A.N(A.aBP(A.dx("https://your-backend.up.railway.app/api/goals/"+k),A.ae(["Authorization","Bearer "+o,"Content-Type","application/json"],n,n)),$async$$0)
+return A.N(A.aBP(A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/goals/"+k),A.ae(["Authorization","Bearer "+o,"Content-Type","application/json"],n,n)),$async$$0)
 case 5:n=b.b
 m=t.J
 if(n===200){l.ac(new A.aky(l,k))
@@ -82647,7 +82647,7 @@ case 3:m=b
 if(p.r==null){s=1
 break}o=t.N
 s=4
-return A.N(A.XV(A.dx("https://your-backend.up.railway.app/api/goals/steps/"+p.a.c+"/current"),A.ae(["Authorization","Bearer "+A.k(m),"Content-Type","application/json"],o,o)),$async$lJ)
+return A.N(A.XV(A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/goals/steps/"+p.a.c+"/current"),A.ae(["Authorization","Bearer "+A.k(m),"Content-Type","application/json"],o,o)),$async$lJ)
 case 4:n=b
 if(n.b===200)p.ac(new A.ak9(p,B.aE.cw(0,A.j5(A.j3(n.e).c.a.h(0,"charset")).cw(0,n.w)),m))
 else p.ac(new A.aka(p,m))
@@ -82657,7 +82657,7 @@ na(a){return this.ach(a)},
 ach(a){var s=0,r=A.R(t.H),q,p=2,o=[],n=this,m,l,k,j,i
 var $async$na=A.S(function(b,c){if(b===1){o.push(c)
 s=p}while(true)switch(s){case 0:if(n.r==null){s=1
-break}m=A.dx("https://your-backend.up.railway.app"+a)
+break}m=A.dx("https://onestep-backend-production-9ac1.up.railway.app"+a)
 p=4
 k=t.N
 s=7
@@ -82699,7 +82699,7 @@ rs(){var s=0,r=A.R(t.H),q,p=2,o=[],n=this,m,l,k,j,i,h
 var $async$rs=A.S(function(a,b){if(a===1){o.push(b)
 s=p}while(true)switch(s){case 0:if(n.r==null){n.nh("No token found. Please log in again.")
 s=1
-break}m=A.dx("https://your-backend.up.railway.app/ai/generateStep?goalId="+n.a.c)
+break}m=A.dx("https://onestep-backend-production-9ac1.up.railway.app/ai/generateStep?goalId="+n.a.c)
 p=4
 j=t.N
 s=7
@@ -82803,7 +82803,7 @@ A.DA.prototype={
 uA(a,b){return this.alI(a,b)},
 alI(a,b){var s=0,r=A.R(t.T),q,p=2,o=[],n=this,m,l,k,j,i,h,g,f,e
 var $async$uA=A.S(function(c,d){if(c===1){o.push(d)
-s=p}while(true)switch(s){case 0:f=A.dx("https://your-backend.up.railway.app/api/auth/login")
+s=p}while(true)switch(s){case 0:f=A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/auth/login")
 p=4
 i=t.N
 h=A.ae(["Content-Type","application/json"],i,i)
@@ -82906,7 +82906,7 @@ if(m==null){A.ch("No token found to get completed goals")
 s=1
 break}o=t.N
 s=4
-return A.N(A.XV(A.dx("https://your-backend.up.railway.app/api/goals/completed"),A.ae(["Authorization","Bearer "+m,"Content-Type","application/json"],o,o)),$async$rn)
+return A.N(A.XV(A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/goals/completed"),A.ae(["Authorization","Bearer "+m,"Content-Type","application/json"],o,o)),$async$rn)
 case 4:n=b
 if(n.b===200)p.ac(new A.amt(p,B.aE.cw(0,A.j5(A.j3(n.e).c.a.h(0,"charset")).cw(0,n.w))))
 else A.ch("Failed to fetch completed goals")
@@ -82921,7 +82921,7 @@ if(m==null){A.ch("No token found to get completed steps")
 s=1
 break}o=t.N
 s=4
-return A.N(A.XV(A.dx("https://your-backend.up.railway.app/api/goals/steps/completed"),A.ae(["Authorization","Bearer "+m,"Content-Type","application/json"],o,o)),$async$ro)
+return A.N(A.XV(A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/goals/steps/completed"),A.ae(["Authorization","Bearer "+m,"Content-Type","application/json"],o,o)),$async$ro)
 case 4:n=b
 if(n.b===200)p.ac(new A.amu(p,B.aE.cw(0,A.j5(A.j3(n.e).c.a.h(0,"charset")).cw(0,n.w))))
 else A.ch("Failed to fetch completed steps")
@@ -82936,7 +82936,7 @@ if(m==null){A.ch("No token found to get in progress goals")
 s=1
 break}o=t.N
 s=4
-return A.N(A.XV(A.dx("https://your-backend.up.railway.app/api/goals/in-progress"),A.ae(["Authorization","Bearer "+m,"Content-Type","application/json"],o,o)),$async$rp)
+return A.N(A.XV(A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/goals/in-progress"),A.ae(["Authorization","Bearer "+m,"Content-Type","application/json"],o,o)),$async$rp)
 case 4:n=b
 if(n.b===200)p.ac(new A.amv(p,B.aE.cw(0,A.j5(A.j3(n.e).c.a.h(0,"charset")).cw(0,n.w))))
 else A.ch("Failed to fetch in progress goals")
@@ -82976,7 +82976,7 @@ A.Ea.prototype={
 v2(a,b,c){return this.anC(a,b,c)},
 anC(a,b,c){var s=0,r=A.R(t.T),q,p=2,o=[],n=this,m,l,k,j,i,h,g,f,e
 var $async$v2=A.S(function(d,a0){if(d===1){o.push(a0)
-s=p}while(true)switch(s){case 0:f=A.dx("https://your-backend.up.railway.app/api/auth/register")
+s=p}while(true)switch(s){case 0:f=A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/auth/register")
 p=4
 A.ch("sending POST request to url")
 i=t.N
@@ -83099,7 +83099,7 @@ if(o==null){p.c.a5(t.J).f.fX(B.yH)
 s=1
 break}n=t.N
 m=A.ae(["stepDescription",p.e.a.a,"dueDate",p.f.a.a,"stepStatus","IN_PROGRESS"],n,n)
-l=A.dx("https://your-backend.up.railway.app/api/goals/steps/create/"+p.a.c)
+l=A.dx("https://onestep-backend-production-9ac1.up.railway.app/api/goals/steps/create/"+p.a.c)
 n=A.ae(["Authorization","Bearer "+o,"Content-Type","application/json"],n,n)
 s=4
 return A.N(A.XZ(l,B.aE.tX(m,null),n),$async$t2)
