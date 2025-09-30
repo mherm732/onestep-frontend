@@ -85,7 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pushReplacement(context, 
+            MaterialPageRoute(builder: (context) => const AuthSelectionScreen())),
         ),
       ),
       body: Row(
