@@ -7,7 +7,7 @@ Future<void> logout(BuildContext context) async {
   await storage.delete(key: 'jwt');
 
   Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(builder: (context) => const LoginScreen()),
+    MaterialPageRoute(builder: (context) => const AuthSelectionScreen()),
     (route) => false,
   );
 }
