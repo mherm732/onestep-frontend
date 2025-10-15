@@ -144,13 +144,17 @@ Widget build(BuildContext context) {
           const SizedBox(height: 32),
           _buttonBox(
             label: 'Create New Goal',
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const GoalCreationScreen(),
                 ),
               );
+
+              if (result == true) {
+                await fetchGoals();
+              }
             },
           ),
           const SizedBox(height: 20),

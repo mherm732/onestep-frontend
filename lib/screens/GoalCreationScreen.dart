@@ -54,28 +54,11 @@ class _GoalCreationScreenState extends State<GoalCreationScreen> {
     });
 
     if (response.statusCode == 200) {
-      final goalJson = jsonDecode(response.body);
-      final goalId = goalJson['goalId'];
-      final title = goalJson['title'];
-      final description = goalJson['goalDescription'];
-
-      if (goalId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error: goalId is null')),
-        );
-        return;
-      }
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GoalDetailsScreen(
-            goalId: goalId.toString(),
-            goalTitle: title ?? '',
-            goalDescription: description ?? '',
-          ),
-        ),
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Goal created successfully!')),
       );
+
+      Navigator.pop(context, true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error creating new goal')),
