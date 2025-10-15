@@ -76,6 +76,10 @@ class _GoalCreationScreenState extends State<GoalCreationScreen> {
           ),
         ),
       );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error creating new goal')),
+      );
     }
   }
 
