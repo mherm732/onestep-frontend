@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:one_step_app_flutter/screens/goal_details_screen.dart';
 import 'package:one_step_app_flutter/screens/progress_screen.dart';
+import 'package:one_step_app_flutter/screens/register_login_selection.dart';
 import 'GoalCreationScreen.dart';
 import '../widgets/appbar_with_logout.dart';
 import 'package:one_step_app_flutter/environment.dart';
