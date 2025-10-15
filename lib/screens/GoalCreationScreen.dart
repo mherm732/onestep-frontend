@@ -53,15 +53,17 @@ class _GoalCreationScreenState extends State<GoalCreationScreen> {
       isSubmitting = false;
     });
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Goal created successfully!')),
       );
 
       Navigator.pop(context, true);
     } else {
+      print('Error creating goal. Status: ${response.statusCode}');
+      print('Response body: ${response.body}');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error creating new goal')),
+        SnackBar(content: Text('Error creating goal: ${response.statusCode}')),
       );
     }
   }
