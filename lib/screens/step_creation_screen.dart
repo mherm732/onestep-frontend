@@ -75,9 +75,9 @@ class _StepCreationScreenState extends State<StepCreationScreen> {
       isSubmitting = false;
     });
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final stepJson = jsonDecode(response.body);
-      final stepId = stepJson['stepId'];
+      final stepId = stepJson['step_id'];
 
       if (stepId == null) {
         ScaffoldMessenger.of(context).showSnackBar(
