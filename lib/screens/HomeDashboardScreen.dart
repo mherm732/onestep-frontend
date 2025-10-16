@@ -72,7 +72,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                 'goalId': goal['goalId'].toString(),
                 'title': goal['title']?.toString() ?? 'Untitled',
                 'goalStatus': goal['goalStatus']?.toString() ?? 'Incomplete',
-                'description': goal['goalDescription']?.toString() ?? '',
+                'description': goal['goal_description']?.toString() ?? '',
               }).toList();
           isLoading = false;
         });
