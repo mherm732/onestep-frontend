@@ -59,7 +59,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       },
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final step = json.decode(response.body);
       setState(() {
         currentStep = step;
@@ -85,7 +85,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         _showSnackBar('Action successful');
         await _fetchCurrentStep();
       } else {
