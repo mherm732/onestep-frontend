@@ -62,6 +62,8 @@ class _StepCreationScreenState extends State<StepCreationScreen> {
       "stepStatus": "IN_PROGRESS",
     };
 
+    print('Creating step with data: $stepData');
+
     final response = await http.post(
       Uri.parse('${Environment.apiBaseUrl}/api/goals/steps/create/${widget.goalId}'),
       headers: {
@@ -70,6 +72,9 @@ class _StepCreationScreenState extends State<StepCreationScreen> {
       },
       body: jsonEncode(stepData),
     );
+
+    print('Step creation response status: ${response.statusCode}');
+    print('Step creation response body: ${response.body}');
 
     setState(() {
       isSubmitting = false;
