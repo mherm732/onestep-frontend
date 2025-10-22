@@ -31,6 +31,9 @@ class _GoalCreationScreenState extends State<GoalCreationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Not authenticated')),
       );
+      setState(() {
+        isSubmitting = false;
+      });
       return;
     }
 
@@ -40,6 +43,12 @@ class _GoalCreationScreenState extends State<GoalCreationScreen> {
       'goalStatus': 'IN_PROGRESS',
     };
 
+    print('=== Goal Creation Debug ===');
+    print('Title from controller: "${_nameController.text}"');
+    print('Description from controller: "${_descController.text}"');
+    print('Sending JSON: ${jsonEncode(goalData)}');
+    print('=========================');
+
     final response = await http.post(
       Uri.parse('${Environment.apiBaseUrl}/api/goals/create'),
       headers: {
@@ -48,6 +57,9 @@ class _GoalCreationScreenState extends State<GoalCreationScreen> {
       },
       body: jsonEncode(goalData),
     );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
     setState(() {
       isSubmitting = false;
