@@ -50,8 +50,8 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     final t = await storage.read(key: 'jwt');
     if (token == null) return;
 
-    final url = Uri.parse('${Environment.apiBaseUrl}/api/goals/steps/${widget.goalId}/current');
-    print('Fetching current step from: $url');
+    final url = Uri.parse('${Environment.apiBaseUrl}/api/goals/steps/${widget.goalId}');
+    print('Fetching steps from: $url');
 
     try {
       final response = await http.get(
@@ -66,22 +66,31 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       print('Response body: ${response.body}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final step = json.decode(response.body);
+        final List<dynamic> steps = json.decode(response.body);
+
+        // Find the first step that is not complete or skipped
+        final current = steps.isEmpty
+          ? null
+          : steps.firstWhere(
+              (s) => s['status'] != 'COMPLETE' && s['status'] != 'SKIPPED',
+              orElse: () => null,
+            );
+
         setState(() {
-          currentStep = step;
+          currentStep = current;
           isLoading = false;
           token = t;
         });
       } else if (response.statusCode == 404) {
-        // No current step found - this is okay
-        print('No current step found (404)');
+        // No steps found - this is okay
+        print('No steps found (404)');
         setState(() {
           currentStep = null;
           isLoading = false;
           token = t;
         });
       } else {
-        print('Error fetching current step: ${response.statusCode}');
+        print('Error fetching steps: ${response.statusCode}');
         setState(() {
           currentStep = null;
           isLoading = false;
@@ -89,7 +98,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         });
       }
     } catch (e) {
-      print('Exception fetching current step: $e');
+      print('Exception fetching steps: $e');
       setState(() {
         currentStep = null;
         isLoading = false;
