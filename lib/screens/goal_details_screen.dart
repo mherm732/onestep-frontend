@@ -51,22 +51,45 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     if (token == null) return;
 
     final url = Uri.parse('${Environment.apiBaseUrl}/api/goals/steps/${widget.goalId}/current');
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $t',
-        'Content-Type': 'application/json',
-      },
-    );
+    print('Fetching current step from: $url');
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final step = json.decode(response.body);
-      setState(() {
-        currentStep = step;
-        isLoading = false;
-        token = t;
-      });
-    } else {
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $t',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final step = json.decode(response.body);
+        setState(() {
+          currentStep = step;
+          isLoading = false;
+          token = t;
+        });
+      } else if (response.statusCode == 404) {
+        // No current step found - this is okay
+        print('No current step found (404)');
+        setState(() {
+          currentStep = null;
+          isLoading = false;
+          token = t;
+        });
+      } else {
+        print('Error fetching current step: ${response.statusCode}');
+        setState(() {
+          currentStep = null;
+          isLoading = false;
+          token = t;
+        });
+      }
+    } catch (e) {
+      print('Exception fetching current step: $e');
       setState(() {
         currentStep = null;
         isLoading = false;
