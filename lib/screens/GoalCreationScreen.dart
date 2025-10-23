@@ -22,6 +22,8 @@ class _GoalCreationScreenState extends State<GoalCreationScreen> {
   Future<void> _submitGoal() async {
     if (!_formKey.currentState!.validate()) return;
 
+    print('SUBMIT GOAL CALLED - Form validated');
+
     setState(() {
       isSubmitting = true;
     });
