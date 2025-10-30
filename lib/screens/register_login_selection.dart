@@ -6,10 +6,10 @@ class AuthSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
-      body: Row(
-        children: [
+      body: SafeArea(
+        child: Row(
+          children: [
           // Left panel
           Container(
             width: screenWidth * 0.4,
@@ -55,7 +55,7 @@ class AuthSelectionScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ),
   }
 
   Widget _buildActionButton({required String label, required VoidCallback onPressed}) {
