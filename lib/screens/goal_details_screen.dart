@@ -50,7 +50,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     final t = await storage.read(key: 'jwt');
     if (token == null) return;
 
-    final url = Uri.parse('${Environment.apiBaseUrl}/api/goals/steps/${widget.goalId}');
+    final url = Uri.parse('${Environment.apiBaseUrl}/api/goals/steps/${widget.goalId}/current');
     print('Fetching steps from: $url');
 
     try {

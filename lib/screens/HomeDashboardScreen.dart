@@ -84,44 +84,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
     }
   }
 
-  Future<Map<String, String>> fetchCurrentStep(String goalId) async {
-    final url = '${Environment.apiBaseUrl}/api/goals/steps/$goalId/current';
-
-    try {
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> steps = jsonDecode(response.body);
-
-        if (steps.isEmpty) {
-          return {'title': 'No steps', 'status': 'N/A'};
-        }
-
-        final current = steps.firstWhere(
-          (s) => s['status'] != 'Complete',
-          orElse: () => steps.first,
-        );
-
-        return {
-          'title': current['title'] ?? 'Step',
-          'status': current['status'] ?? 'PENDING',
-        };
-      } else {
-        print('Failed to fetch steps for goal $goalId');
-      }
-    } catch (e) {
-      print('Error fetching steps: $e');
-    }
-
-    return {'title': 'Unknown', 'status': 'Unknown'};
-  }
-
 @override
 Widget build(BuildContext context) {
   return Scaffold(
