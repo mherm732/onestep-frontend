@@ -67,22 +67,31 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       Map<String, dynamic>? fetchedStep;
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final List<dynamic> steps = json.decode(response.body);
-        print('Fetched ${steps.length} steps');
-        if (steps.isNotEmpty) {
-          print('First step data: ${steps[0]}');
-        }
+        // Backend returns a single step object, not an array
+        final dynamic decoded = json.decode(response.body);
 
-        // Find the first step that is not complete or skipped
-        fetchedStep = steps.isEmpty
-          ? null
-          : steps.firstWhere(
-              (s) {
-                final status = s['status'] ?? s['stepStatus'];
-                return status != 'COMPLETE' && status != 'SKIPPED';
-              },
-              orElse: () => null,
-            );
+        // Check if it's an object or array for backwards compatibility
+        if (decoded is Map<String, dynamic>) {
+          // Single step object
+          fetchedStep = decoded;
+          print('Fetched single step: $fetchedStep');
+        } else if (decoded is List) {
+          // Array of steps (old behavior)
+          print('Fetched ${decoded.length} steps');
+          if (decoded.isNotEmpty) {
+            print('First step data: ${decoded[0]}');
+          }
+
+          fetchedStep = decoded.isEmpty
+            ? null
+            : decoded.firstWhere(
+                (s) {
+                  final status = s['status'] ?? s['stepStatus'];
+                  return status != 'COMPLETE' && status != 'SKIPPED';
+                },
+                orElse: () => null,
+              );
+        }
 
         print('Current active step: $fetchedStep');
       } else if (response.statusCode == 404) {
