@@ -67,14 +67,24 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final List<dynamic> steps = json.decode(response.body);
+        print('Fetched ${steps.length} steps');
+        if (steps.isNotEmpty) {
+          print('First step data: ${steps[0]}');
+        }
 
         // Find the first step that is not complete or skipped
+        // Check both 'status' and 'stepStatus' field names for compatibility
         final current = steps.isEmpty
           ? null
           : steps.firstWhere(
-              (s) => s['status'] != 'COMPLETE' && s['status'] != 'SKIPPED',
+              (s) {
+                final status = s['status'] ?? s['stepStatus'];
+                return status != 'COMPLETE' && status != 'SKIPPED';
+              },
               orElse: () => null,
             );
+
+        print('Current active step: $current');
 
         setState(() {
           currentStep = current;
@@ -226,11 +236,11 @@ Widget _buildRectBox(String label, String value) {
   Widget build(BuildContext context) {
      bool hasActiveStep = currentStep != null;
      String currentStepText = hasActiveStep
-        ? currentStep!['stepDescription'] ?? 'No description'
+        ? (currentStep!['stepDescription'] ?? currentStep!['step_description'] ?? 'No description')
         : 'No steps have been created for this goal.';
 
      String statusText = hasActiveStep
-        ? currentStep!['status'] ?? 'Unknown'
+        ? (currentStep!['status'] ?? currentStep!['stepStatus'] ?? 'Unknown')
         : 'None';
 
     return Scaffold(

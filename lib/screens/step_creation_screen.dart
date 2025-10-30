@@ -84,15 +84,9 @@ class _StepCreationScreenState extends State<StepCreationScreen> {
     });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final stepJson = jsonDecode(response.body);
-      final stepId = stepJson['step_id'];
-
-      if (stepId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error: stepId is null')),
-        );
-        return;
-      }
+      // Step was created successfully, navigate back to goal details
+      // The backend returns 200, so we trust the step was created even if response is invalid JSON
+      print('Step created successfully, navigating to goal details');
 
       Navigator.pushReplacement(
         context,
