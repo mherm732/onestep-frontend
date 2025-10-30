@@ -291,6 +291,26 @@ Widget _buildRectBox(String label, String value) {
                 _buildRectBox('Goal Description', widget.goalDescription),
                 _buildRectBox('Current Step',currentStepText),
                 _buildRectBox('Step Status', statusText),
+
+                // Always show these buttons
+                _buildButton(
+                  'Mark Step as Complete',
+                  hasActiveStep
+                    ? () => _putToEndpoint('/api/goals/steps/update/mark-complete/${currentStep!['stepId']}')
+                    : null,
+                  enabled: hasActiveStep,
+                ),
+                _buildButton(
+                  'Skip Step',
+                  hasActiveStep
+                    ? () => _putToEndpoint('/api/goals/steps/skip/${currentStep!['stepId']}')
+                    : null,
+                  enabled: hasActiveStep,
+                ),
+                _buildButton('Create Manual Step', _navigateToManualStepCreation),
+                _buildButton('Generate Step', _generateStepFromAI),
+
+                // Show "Mark Goal as Complete" only when no active steps
                 if (!hasActiveStep) ...[
                   const SizedBox(height: 12),
                   const Text(
@@ -303,23 +323,10 @@ Widget _buildRectBox(String label, String value) {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _buildButton('Create Manual Step', _navigateToManualStepCreation),
-                  _buildButton('Generate Step', _generateStepFromAI),
                   _buildButton('Mark Goal as Complete', () {
-                    _putToEndpoint('/api/goals/update/complete/${widget.goalId}'); 
+                    _putToEndpoint('/api/goals/update/complete/${widget.goalId}');
                     _navigateToHomeDashboard();
                   }),
-                 ] else ...[
-                  _buildButton(
-                    'Mark Step as Complete',
-                    () => _putToEndpoint('/api/goals/steps/update/mark-complete/${currentStep!['stepId']}'),
-                  ),
-                  _buildButton(
-                    'Skip Step',
-                    () => _putToEndpoint('/api/goals/steps/skip/${currentStep!['stepId']}'),
-                  ),
-                  _buildButton('Create Manual Step', _navigateToManualStepCreation),
-                  _buildButton('Generate Step', _generateStepFromAI),
                 ],
               ],
             ),
