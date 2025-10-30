@@ -85,7 +85,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
   }
 
   Future<Map<String, String>> fetchCurrentStep(String goalId) async {
-    final url = '${Environment.apiBaseUrl}/api/goals/steps/$goalId';
+    final url = '${Environment.apiBaseUrl}/api/goals/steps/$goalId/current';
 
     try {
       final response = await http.get(
