@@ -56,10 +56,13 @@ class _StepCreationScreenState extends State<StepCreationScreen> {
       return;
     }
 
+    print('Debug - Description controller text: "${_descController.text}"');
+    print('Debug - Due date controller text: "${_dueDateController.text}"');
+
     final stepData = {
-      "step_description": _descController.text,
-      "due_date": _dueDateController.text,
-      "step_status": "IN_PROGRESS",
+      "stepDescription": _descController.text,
+      "dueDate": _dueDateController.text,
+      "stepStatus": "IN_PROGRESS",
     };
 
     print('Creating step with data: $stepData');

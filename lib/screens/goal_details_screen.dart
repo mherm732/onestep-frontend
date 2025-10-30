@@ -226,7 +226,7 @@ Widget _buildRectBox(String label, String value) {
   Widget build(BuildContext context) {
      bool hasActiveStep = currentStep != null;
      String currentStepText = hasActiveStep
-        ? currentStep!['step_description'] ?? 'No description'
+        ? currentStep!['stepDescription'] ?? 'No description'
         : 'No steps have been created for this goal.';
 
      String statusText = hasActiveStep
@@ -302,11 +302,11 @@ Widget _buildRectBox(String label, String value) {
                  ] else ...[
                   _buildButton(
                     'Mark Step as Complete',
-                    () => _putToEndpoint('/api/goals/steps/update/mark-complete/${currentStep!['step_id']}'),
+                    () => _putToEndpoint('/api/goals/steps/update/mark-complete/${currentStep!['stepId']}'),
                   ),
                   _buildButton(
                     'Skip Step',
-                    () => _putToEndpoint('/api/goals/steps/skip/${currentStep!['step_id']}'),
+                    () => _putToEndpoint('/api/goals/steps/skip/${currentStep!['stepId']}'),
                   ),
                   _buildButton('Create Manual Step', _navigateToManualStepCreation),
                   _buildButton('Generate Step', _generateStepFromAI),
