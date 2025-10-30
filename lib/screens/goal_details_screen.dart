@@ -47,7 +47,6 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   }
 
   Future<void> _fetchCurrentStep() async {
-    final t = await storage.read(key: 'jwt');
     if (token == null) return;
 
     final url = Uri.parse('${Environment.apiBaseUrl}/api/goals/steps/${widget.goalId}/current');
@@ -57,13 +56,15 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       final response = await http.get(
         url,
         headers: {
-          'Authorization': 'Bearer $t',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
 
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
+
+      Map<String, dynamic>? fetchedStep;
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final List<dynamic> steps = json.decode(response.body);
@@ -73,8 +74,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
         }
 
         // Find the first step that is not complete or skipped
-        // Check both 'status' and 'stepStatus' field names for compatibility
-        final current = steps.isEmpty
+        fetchedStep = steps.isEmpty
           ? null
           : steps.firstWhere(
               (s) {
@@ -84,40 +84,29 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
               orElse: () => null,
             );
 
-        print('Current active step: $current');
-
-        setState(() {
-          currentStep = current;
-          isLoading = false;
-          token = t;
-        });
+        print('Current active step: $fetchedStep');
       } else if (response.statusCode == 404) {
-        // No steps found - this is okay
         print('No steps found (404)');
-        setState(() {
-          currentStep = null;
-          isLoading = false;
-          token = t;
-        });
+        fetchedStep = null;
       } else {
         print('Error fetching steps: ${response.statusCode}');
-        setState(() {
-          currentStep = null;
-          isLoading = false;
-          token = t;
-        });
+        fetchedStep = null;
       }
+
+      setState(() {
+        currentStep = fetchedStep;
+        isLoading = false;
+      });
     } catch (e) {
       print('Exception fetching steps: $e');
       setState(() {
         currentStep = null;
         isLoading = false;
-        token = t;
       });
     }
   }
 
-  Future<void> _putToEndpoint(String endpoint) async {
+  Future<void> _putToEndpoint(String endpoint, String actionName) async {
     if (token == null) return;
     final url = Uri.parse('${Environment.apiBaseUrl}$endpoint');
 
@@ -128,10 +117,10 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _showSnackBar('Action successful');
+        _showSnackBar('$actionName successfully');
         await _fetchCurrentStep();
       } else {
-        _showSnackBar('Error: ${response.statusCode}');
+        _showSnackBar('Failed to $actionName: ${response.statusCode}');
       }
     } catch (e) {
       _showSnackBar('Failed to connect to server');
@@ -156,8 +145,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   }
 
   void _navigateToHomeDashboard(){
-    Navigator.push(context, 
-      MaterialPageRoute(builder: (context) => HomeDashboardScreen()));
+    Navigator.pop(context);
   }
 
   Future<void> _generateStepFromAI() async {
@@ -296,14 +284,14 @@ Widget _buildRectBox(String label, String value) {
                 _buildButton(
                   'Mark Step as Complete',
                   hasActiveStep
-                    ? () => _putToEndpoint('/api/goals/steps/update/mark-complete/${currentStep!['stepId']}')
+                    ? () => _putToEndpoint('/api/goals/steps/update/mark-complete/${currentStep!['stepId']}', 'Step marked as complete')
                     : null,
                   enabled: hasActiveStep,
                 ),
                 _buildButton(
                   'Skip Step',
                   hasActiveStep
-                    ? () => _putToEndpoint('/api/goals/steps/skip/${currentStep!['stepId']}')
+                    ? () => _putToEndpoint('/api/goals/steps/skip/${currentStep!['stepId']}', 'Step skipped')
                     : null,
                   enabled: hasActiveStep,
                 ),
@@ -323,8 +311,8 @@ Widget _buildRectBox(String label, String value) {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _buildButton('Mark Goal as Complete', () {
-                    _putToEndpoint('/api/goals/update/complete/${widget.goalId}');
+                  _buildButton('Mark Goal as Complete', () async {
+                    await _putToEndpoint('/api/goals/update/complete/${widget.goalId}', 'Goal marked as complete');
                     _navigateToHomeDashboard();
                   }),
                 ],
