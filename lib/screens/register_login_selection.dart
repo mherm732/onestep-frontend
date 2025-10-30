@@ -55,7 +55,8 @@ class AuthSelectionScreen extends StatelessWidget {
           ),
         ],
       ),
-    ),
+      ),
+    );
   }
 
   Widget _buildActionButton({required String label, required VoidCallback onPressed}) {
