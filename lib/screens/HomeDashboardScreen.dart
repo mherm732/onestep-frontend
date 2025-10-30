@@ -240,7 +240,11 @@ Widget build(BuildContext context) {
             goalDescription: goalDescription,
           ),
         ),
-      );
+      ).then((_) {
+        // Refresh goals when returning from goal details
+        // This ensures any status changes are reflected
+        fetchGoals();
+      });
     },
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),

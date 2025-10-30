@@ -85,19 +85,10 @@ class _StepCreationScreenState extends State<StepCreationScreen> {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // Step was created successfully, navigate back to goal details
-      // The backend returns 200, so we trust the step was created even if response is invalid JSON
-      print('Step created successfully, navigating to goal details');
+      // Use pop instead of pushReplacement so the GoalDetailsScreen's .then() callback executes
+      print('Step created successfully, navigating back');
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GoalDetailsScreen(
-            goalId: widget.goalId,
-            goalTitle: widget.title,
-            goalDescription: widget.description,
-          ),
-        ),
-      );
+      Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed: ${response.body}")),
