@@ -97,7 +97,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
         },
       );
 
-      if (response.statusCode == 200 | response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final List<dynamic> steps = jsonDecode(response.body);
 
         if (steps.isEmpty) {
