@@ -153,9 +153,12 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
 //Build rectangular box for web page text
 
 Widget _buildRectBox(String label, String value) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(16),
+      margin: EdgeInsets.symmetric(vertical: isMobile ? 6 : 8),
+      padding: EdgeInsets.all(isMobile ? 12 : 16),
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -164,8 +167,8 @@ Widget _buildRectBox(String label, String value) {
       ),
       child: Text(
         '$label: $value',
-        style: const TextStyle(
-          fontSize: 18,
+        style: TextStyle(
+          fontSize: isMobile ? 14 : 18,
           fontFamily: 'JetBrainsMono Nerd Font',
         ),
       ),
@@ -175,20 +178,23 @@ Widget _buildRectBox(String label, String value) {
   // Button characteristics
 
   Widget _buildButton(String label, VoidCallback? onPressed, {bool enabled = true}) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
+      margin: EdgeInsets.symmetric(vertical: isMobile ? 4 : 6),
       width: double.infinity,
       child: ElevatedButton(
         onPressed: enabled ? onPressed : null,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xffd9f316),
           foregroundColor: const Color(0xff1d2528),
-          textStyle: const TextStyle(
+          textStyle: TextStyle(
             fontFamily: 'JetBrainsMono Nerd Font',
-            fontSize: 18,
+            fontSize: isMobile ? 14 : 18,
             fontWeight: FontWeight.bold,
           ),
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(vertical: isMobile ? 10 : 14),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: Text(label),
@@ -198,6 +204,9 @@ Widget _buildRectBox(String label, String value) {
 
   @override
   Widget build(BuildContext context) {
+     final screenWidth = MediaQuery.of(context).size.width;
+     final isMobile = screenWidth < 768;
+
      bool hasActiveStep = currentStep != null;
      String currentStepText = hasActiveStep
         ? currentStep!['stepDescription'] ?? 'No description'
@@ -213,7 +222,7 @@ Widget _buildRectBox(String label, String value) {
         automaticallyImplyLeading: false,
         leading: IconButton(icon: const Icon(Icons.home_filled),
         onPressed: () {
-          Navigator.pushReplacement(context, 
+          Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const HomeDashboardScreen()),
             );
           },
@@ -222,9 +231,10 @@ Widget _buildRectBox(String label, String value) {
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           widget.goalTitle,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'JetBrainsMono Nerd Font',
             color: Colors.white,
+            fontSize: isMobile ? 16 : 20,
           ),
         ),
         centerTitle: true,
@@ -234,8 +244,8 @@ Widget _buildRectBox(String label, String value) {
     : SingleChildScrollView(
         child: Center(
           child: Container(
-            padding: const EdgeInsets.all(24),
-            margin: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(isMobile ? 12 : 24),
+            margin: EdgeInsets.all(isMobile ? 8 : 16),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: Colors.black87, width: 2),
@@ -257,17 +267,17 @@ Widget _buildRectBox(String label, String value) {
                 _buildRectBox('Current Step',currentStepText),
                 _buildRectBox('Step Status', statusText),
                 if (!hasActiveStep) ...[
-                  const SizedBox(height: 12),
-                  const Text(
+                  SizedBox(height: isMobile ? 8 : 12),
+                  Text(
                     'You have completed or skipped all steps.\nYou can create a new step or mark this goal as complete.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: isMobile ? 12 : 16,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'JetBrainsMono Nerd Font',
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: isMobile ? 8 : 12),
                   _buildButton('Create Manual Step', _navigateToManualStepCreation),
                   _buildButton('Generate Step', _generateStepFromAI),
                   _buildButton(

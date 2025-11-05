@@ -125,24 +125,30 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
 
 @override
 Widget build(BuildContext context) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final isMobile = screenWidth < 768;
+
   return Scaffold(
     appBar: buildAppBarWithLogout(context, 'Dashboard'),
     backgroundColor: const Color(0xffe6e6e6),
     body: SingleChildScrollView( child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 12 : 20,
+        vertical: isMobile ? 12 : 16,
+      ),
       child: Center (
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _labelText('Your Goals'),
-          const SizedBox(height: 24),
+          SizedBox(height: isMobile ? 16 : 24),
           if (isLoading)
             const CircularProgressIndicator()
           else if (userGoals.isEmpty)
             const Text("No goals found. Start by creating one.")
           else
             ...userGoals.map((goal) => _goalRow(goal)).toList(),
-          const SizedBox(height: 32),
+          SizedBox(height: isMobile ? 20 : 32),
           _buttonBox(
             label: 'Create New Goal',
             onPressed: () async {
@@ -158,7 +164,7 @@ Widget build(BuildContext context) {
               }
             },
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: isMobile ? 12 : 20),
           _buttonBox(
             label: 'View Progress',
             onPressed: () {
@@ -170,7 +176,7 @@ Widget build(BuildContext context) {
               );
             },
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: isMobile ? 20 : 40),
         ],
       ),
     ),
@@ -181,11 +187,14 @@ Widget build(BuildContext context) {
 
 
   Widget _labelText(String text) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         fontFamily: 'JetBrainsMono Nerd Font',
-        fontSize: 36,
+        fontSize: isMobile ? 24 : 36,
         color: Color(0xff1d2528),
         fontWeight: FontWeight.w600,
       ),
@@ -193,6 +202,31 @@ Widget build(BuildContext context) {
   }
 
   Widget _goalRow(Map<String, String> goal) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+
+    if (isMobile) {
+      // Stack vertically on mobile
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _goalBox(goal),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(child: _statusBox(goal['goalStatus'] ?? '')),
+                const SizedBox(width: 8),
+                Expanded(child: _deleteBox(goal['goalId'] ?? '')),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Desktop layout
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -208,7 +242,7 @@ Widget build(BuildContext context) {
           ),
           const SizedBox(width: 12),
           Expanded(
-            flex: 1, 
+            flex: 1,
             child: _deleteBox(goal['goalId'] ?? ''),
           )
         ],
@@ -217,6 +251,9 @@ Widget build(BuildContext context) {
   }
 
  Widget _goalBox(Map<String, String> goal) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final isMobile = screenWidth < 768;
+
   final goalId = goal['goalId'];
   final goalTitle = goal['title'];
   final goalDescription = goal['description'];
@@ -244,16 +281,19 @@ Widget build(BuildContext context) {
       );
     },
     child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 12 : 24,
+        vertical: isMobile ? 12 : 16,
+      ),
       decoration: BoxDecoration(
         color: const Color(0xffe6e6e6),
         border: Border.all(color: const Color(0xff707070)),
       ),
       child: Text(
         goalTitle ?? 'Untitled',
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'JetBrainsMono Nerd Font',
-          fontSize: 20,
+          fontSize: isMobile ? 16 : 20,
           color: Color(0xff1d2528),
         ),
       ),
@@ -263,8 +303,14 @@ Widget build(BuildContext context) {
 
 
   Widget _statusBox(String status) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 8 : 16,
+        vertical: isMobile ? 12 : 16,
+      ),
       decoration: BoxDecoration(
         color: const Color(0xffd9f316),
         border: Border.all(color: const Color(0xff707070)),
@@ -272,9 +318,9 @@ Widget build(BuildContext context) {
       child: Center(
         child: Text(
           status,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'JetBrainsMono Nerd Font',
-            fontSize: 18,
+            fontSize: isMobile ? 14 : 18,
             fontWeight: FontWeight.w600,
             color: Color(0xff1d2528),
           ),
@@ -284,11 +330,17 @@ Widget build(BuildContext context) {
   }
 
   Widget _buttonBox({required String label, required VoidCallback onPressed}) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: 320,
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+        width: isMobile ? double.infinity : 320,
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 16 : 32,
+          vertical: isMobile ? 14 : 20,
+        ),
         decoration: BoxDecoration(
           color: const Color(0xffd9f316),
           border: Border.all(color: Color(0xff1d2528), width: 4),
@@ -296,9 +348,9 @@ Widget build(BuildContext context) {
         child: Center(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'JetBrainsMono Nerd Font',
-              fontSize: 24,
+              fontSize: isMobile ? 18 : 24,
               fontWeight: FontWeight.bold,
               color: Color(0xff1d2528),
             ),
@@ -309,6 +361,9 @@ Widget build(BuildContext context) {
   }
 
   Widget _deleteBox(String goalId) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final isMobile = screenWidth < 768;
+
   return GestureDetector(
     onTap: () async {
       final confirmed = await showDialog<bool>(
@@ -363,17 +418,20 @@ Widget build(BuildContext context) {
       }
     },
     child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 8 : 16,
+        vertical: isMobile ? 12 : 16,
+      ),
       decoration: BoxDecoration(
         color: const Color(0xffd9f316),
         border: Border.all(color: const Color(0xff707070)),
       ),
-      child: const Center(
+      child: Center(
         child: Text(
           'Delete Goal',
           style: TextStyle(
             fontFamily: 'JetBrainsMono Nerd Font',
-            fontSize: 18,
+            fontSize: isMobile ? 14 : 18,
             fontWeight: FontWeight.w600,
             color: Color(0xff1d2528),
           ),
