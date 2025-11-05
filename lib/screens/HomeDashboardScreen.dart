@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:one_step_app_flutter/screens/goal_details_screen.dart';
 import 'package:one_step_app_flutter/screens/progress_screen.dart';
-import 'package:one_step_app_flutter/screens/register_login_selection.dart';
 import 'GoalCreationScreen.dart';
 import '../widgets/appbar_with_logout.dart';
 import 'package:one_step_app_flutter/environment.dart';
@@ -45,6 +44,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
     await fetchGoals();
   }
 
+//Get goals for authorized user 
+
   Future<void> fetchGoals() async {
     if (token == null) {
       print('Token is null, aborting fetchGoals');
@@ -82,6 +83,44 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
     } catch (e) {
       print('Error fetching goals: $e');
     }
+  }
+
+  Future<Map<String, String>> fetchCurrentStep(String goalId) async {
+    final url = '${Environment.apiBaseUrl}/api/goals/steps/$goalId/current';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200 | response.statusCode == 201) {
+        final List<dynamic> steps = jsonDecode(response.body);
+
+        if (steps.isEmpty) {
+          return {'title': 'No steps', 'status': 'N/A'};
+        }
+
+        final current = steps.firstWhere(
+          (s) => s['status'] != 'Complete',
+          orElse: () => steps.first,
+        );
+
+        return {
+          'title': current['title'] ?? 'Step',
+          'status': current['status'] ?? 'PENDING',
+        };
+      } else {
+        print('Failed to fetch steps for goal $goalId');
+      }
+    } catch (e) {
+      print('Error fetching steps: $e');
+    }
+
+    return {'title': 'Unknown', 'status': 'Unknown'};
   }
 
 @override
@@ -202,11 +241,7 @@ Widget build(BuildContext context) {
             goalDescription: goalDescription,
           ),
         ),
-      ).then((_) {
-        // Refresh goals when returning from goal details
-        // This ensures any status changes are reflected
-        fetchGoals();
-      });
+      );
     },
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -314,7 +349,7 @@ Widget build(BuildContext context) {
         },
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 204) {
         setState(() {
           userGoals.removeWhere((goal) => goal['goalId'] == goalId);
         });

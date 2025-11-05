@@ -47,75 +47,35 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   }
 
   Future<void> _fetchCurrentStep() async {
+    final t = await storage.read(key: 'jwt');
     if (token == null) return;
 
     final url = Uri.parse('${Environment.apiBaseUrl}/api/goals/steps/${widget.goalId}/current');
-    print('Fetching steps from: $url');
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $t',
+        'Content-Type': 'application/json',
+      },
+    );
 
-    try {
-      final response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
-      Map<String, dynamic>? fetchedStep;
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // Backend returns a single step object, not an array
-        final dynamic decoded = json.decode(response.body);
-
-        // Check if it's an object or array for backwards compatibility
-        if (decoded is Map<String, dynamic>) {
-          // Single step object
-          fetchedStep = decoded;
-          print('Fetched single step: $fetchedStep');
-        } else if (decoded is List) {
-          // Array of steps (old behavior)
-          print('Fetched ${decoded.length} steps');
-          if (decoded.isNotEmpty) {
-            print('First step data: ${decoded[0]}');
-          }
-
-          fetchedStep = decoded.isEmpty
-            ? null
-            : decoded.firstWhere(
-                (s) {
-                  final status = s['status'] ?? s['stepStatus'];
-                  return status != 'COMPLETE' && status != 'SKIPPED';
-                },
-                orElse: () => null,
-              );
-        }
-
-        print('Current active step: $fetchedStep');
-      } else if (response.statusCode == 404) {
-        print('No steps found (404)');
-        fetchedStep = null;
-      } else {
-        print('Error fetching steps: ${response.statusCode}');
-        fetchedStep = null;
-      }
-
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final step = json.decode(response.body);
       setState(() {
-        currentStep = fetchedStep;
+        currentStep = step;
         isLoading = false;
+        token = t;
       });
-    } catch (e) {
-      print('Exception fetching steps: $e');
+    } else {
       setState(() {
         currentStep = null;
         isLoading = false;
+        token = t;
       });
     }
   }
 
-  Future<void> _putToEndpoint(String endpoint, String actionName) async {
+  Future<void> _putToEndpoint(String endpoint) async {
     if (token == null) return;
     final url = Uri.parse('${Environment.apiBaseUrl}$endpoint');
 
@@ -126,10 +86,10 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _showSnackBar('$actionName successfully');
+        _showSnackBar('Action successful');
         await _fetchCurrentStep();
       } else {
-        _showSnackBar('Failed to $actionName: ${response.statusCode}');
+        _showSnackBar('Error: ${response.statusCode}');
       }
     } catch (e) {
       _showSnackBar('Failed to connect to server');
@@ -154,7 +114,8 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   }
 
   void _navigateToHomeDashboard(){
-    Navigator.pop(context);
+    Navigator.push(context, 
+      MaterialPageRoute(builder: (context) => HomeDashboardScreen()));
   }
 
   Future<void> _generateStepFromAI() async {
@@ -165,7 +126,8 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
 
   final url = Uri.parse('${Environment.apiBaseUrl}/ai/generateStep?goalId=${widget.goalId}');
 
-  try {
+//Authorize user before creating step
+ try {
     final response = await http.post(
       url,
       headers: {
@@ -174,7 +136,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       },
     );
 
-    if (response.statusCode == 200) {
+//Provides user message whether a step has been created succesfully
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
       _showSnackBar('Step generated successfully!');
       await _fetchCurrentStep(); 
     } else {
@@ -186,6 +150,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   }
 }
 
+//Build rectangular box for web page text
 
 Widget _buildRectBox(String label, String value) {
     return Container(
@@ -206,6 +171,8 @@ Widget _buildRectBox(String label, String value) {
       ),
     );
   }
+
+  // Button characteristics
 
   Widget _buildButton(String label, VoidCallback? onPressed, {bool enabled = true}) {
     return Container(
@@ -233,11 +200,11 @@ Widget _buildRectBox(String label, String value) {
   Widget build(BuildContext context) {
      bool hasActiveStep = currentStep != null;
      String currentStepText = hasActiveStep
-        ? (currentStep!['stepDescription'] ?? currentStep!['step_description'] ?? 'No description')
+        ? currentStep!['stepDescription'] ?? 'No description'
         : 'No steps have been created for this goal.';
 
      String statusText = hasActiveStep
-        ? (currentStep!['status'] ?? currentStep!['stepStatus'] ?? 'Unknown')
+        ? currentStep!['status'] ?? 'Unknown'
         : 'None';
 
     return Scaffold(
@@ -288,26 +255,6 @@ Widget _buildRectBox(String label, String value) {
                 _buildRectBox('Goal Description', widget.goalDescription),
                 _buildRectBox('Current Step',currentStepText),
                 _buildRectBox('Step Status', statusText),
-
-                // Always show these buttons
-                _buildButton(
-                  'Mark Step as Complete',
-                  hasActiveStep
-                    ? () => _putToEndpoint('/api/goals/steps/update/mark-complete/${currentStep!['stepId']}', 'Step marked as complete')
-                    : null,
-                  enabled: hasActiveStep,
-                ),
-                _buildButton(
-                  'Skip Step',
-                  hasActiveStep
-                    ? () => _putToEndpoint('/api/goals/steps/skip/${currentStep!['stepId']}', 'Step skipped')
-                    : null,
-                  enabled: hasActiveStep,
-                ),
-                _buildButton('Create Manual Step', _navigateToManualStepCreation),
-                _buildButton('Generate Step', _generateStepFromAI),
-
-                // Show "Mark Goal as Complete" only when no active steps
                 if (!hasActiveStep) ...[
                   const SizedBox(height: 12),
                   const Text(
@@ -320,10 +267,29 @@ Widget _buildRectBox(String label, String value) {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _buildButton('Mark Goal as Complete', () async {
-                    await _putToEndpoint('/api/goals/update/complete/${widget.goalId}', 'Goal marked as complete');
+                  _buildButton('Create Manual Step', _navigateToManualStepCreation),
+                  _buildButton('Generate Step', _generateStepFromAI),
+                  _buildButton(
+                    'Skip Step',
+                    () => _putToEndpoint('/api/goals/steps/skip/${currentStep!['stepId']}'),
+                  ),
+                  _buildButton('Mark Step as Complete',
+                    () => _putToEndpoint('/api/goals/steps/update/mark-complete/${currentStep!['stepId']}')),
+                  _buildButton('Mark Goal as Complete', () {
+                    _putToEndpoint('/api/goals/update/complete/${widget.goalId}'); 
                     _navigateToHomeDashboard();
                   }),
+                 ] else ...[
+                  _buildButton(
+                    'Mark Step as Complete',
+                    () => _putToEndpoint('/api/goals/steps/update/mark-complete/${currentStep!['stepId']}'),
+                  ),
+                  _buildButton(
+                    'Skip Step',
+                    () => _putToEndpoint('/api/goals/steps/skip/${currentStep!['stepId']}'),
+                  ),
+                  _buildButton('Create Manual Step', _navigateToManualStepCreation),
+                  _buildButton('Generate Step', _generateStepFromAI),
                 ],
               ],
             ),
