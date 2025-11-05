@@ -79,6 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
 
     return Scaffold(
       appBar: AppBar(
@@ -90,82 +91,160 @@ class _LoginScreenState extends State<LoginScreen> {
             MaterialPageRoute(builder: (context) => AuthSelectionScreen())),
         ),
       ),
-      body: Row(
-        children: [
-          Container(
-            width: screenWidth * 0.4,
-            color: const Color(0xffd5d1bf),
-            child: const Center(
-              child: Text(
-                'One Step',
-                style: TextStyle(
-                  fontFamily: 'JetBrainsMono Nerd Font',
-                  fontSize: 64,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff1d2528),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              color: const Color(0xff1d2528),
-              padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 80),
+      body: isMobile
+          ? SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Welcome back',
-                    style: TextStyle(
-                      fontFamily: 'JetBrainsMono Nerd Font',
-                      fontSize: 36,
-                      color: Color(0xffe6e6e6),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    color: const Color(0xffd5d1bf),
+                    child: const Center(
+                      child: Text(
+                        'One Step',
+                        style: TextStyle(
+                          fontFamily: 'JetBrainsMono Nerd Font',
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff1d2528),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  Form(
-                    key: _formKey,
+                  Container(
+                    color: const Color(0xff1d2528),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildTextField(
-                          label: 'E-mail',
-                          keyboardType: TextInputType.emailAddress,
-                          onSaved: (val) => email = val!,
-                        ),
-                        const SizedBox(height: 20),
-                        _buildTextField(
-                          label: 'Password',
-                          obscureText: true,
-                          onSaved: (val) => password = val!,
-                        ),
-                        const SizedBox(height: 40),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xffd9f316),
-                            foregroundColor: const Color(0xff1d2528),
-                            textStyle: const TextStyle(
-                              fontFamily: 'JetBrainsMono Nerd Font',
-                              fontStyle: FontStyle.italic,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w300,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 48,
-                              vertical: 16,
-                            ),
+                        const Text(
+                          'Welcome back',
+                          style: TextStyle(
+                            fontFamily: 'JetBrainsMono Nerd Font',
+                            fontSize: 28,
+                            color: Color(0xffe6e6e6),
                           ),
-                          onPressed: _submitForm,
-                          child: const Text('Log In'),
+                        ),
+                        const SizedBox(height: 30),
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              _buildTextField(
+                                label: 'E-mail',
+                                keyboardType: TextInputType.emailAddress,
+                                onSaved: (val) => email = val!,
+                              ),
+                              const SizedBox(height: 20),
+                              _buildTextField(
+                                label: 'Password',
+                                obscureText: true,
+                                onSaved: (val) => password = val!,
+                              ),
+                              const SizedBox(height: 30),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xffd9f316),
+                                    foregroundColor: const Color(0xff1d2528),
+                                    textStyle: const TextStyle(
+                                      fontFamily: 'JetBrainsMono Nerd Font',
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                  ),
+                                  onPressed: _submitForm,
+                                  child: const Text('Log In'),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
+            )
+          : Row(
+              children: [
+                Container(
+                  width: screenWidth * 0.4,
+                  color: const Color(0xffd5d1bf),
+                  child: const Center(
+                    child: Text(
+                      'One Step',
+                      style: TextStyle(
+                        fontFamily: 'JetBrainsMono Nerd Font',
+                        fontSize: 64,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff1d2528),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    color: const Color(0xff1d2528),
+                    padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 80),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Welcome back',
+                          style: TextStyle(
+                            fontFamily: 'JetBrainsMono Nerd Font',
+                            fontSize: 36,
+                            color: Color(0xffe6e6e6),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              _buildTextField(
+                                label: 'E-mail',
+                                keyboardType: TextInputType.emailAddress,
+                                onSaved: (val) => email = val!,
+                              ),
+                              const SizedBox(height: 20),
+                              _buildTextField(
+                                label: 'Password',
+                                obscureText: true,
+                                onSaved: (val) => password = val!,
+                              ),
+                              const SizedBox(height: 40),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xffd9f316),
+                                  foregroundColor: const Color(0xff1d2528),
+                                  textStyle: const TextStyle(
+                                    fontFamily: 'JetBrainsMono Nerd Font',
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 48,
+                                    vertical: 16,
+                                  ),
+                                ),
+                                onPressed: _submitForm,
+                                child: const Text('Log In'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
