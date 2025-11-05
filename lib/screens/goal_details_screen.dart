@@ -231,27 +231,28 @@ Widget _buildRectBox(String label, String value) {
       ),
     body: isLoading
     ? const Center(child: CircularProgressIndicator())
-    : Center(
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          margin: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.black87, width: 2),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: Offset(2, 4),
-              ),
-            ],
-          ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 500),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
+    : SingleChildScrollView(
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            margin: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.black87, width: 2),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: Offset(2, 4),
+                ),
+              ],
+            ),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                 _buildRectBox('Goal Description', widget.goalDescription),
                 _buildRectBox('Current Step',currentStepText),
                 _buildRectBox('Step Status', statusText),
@@ -295,6 +296,7 @@ Widget _buildRectBox(String label, String value) {
             ),
           ),
         ),
+          ),
       ),
     );
   }
