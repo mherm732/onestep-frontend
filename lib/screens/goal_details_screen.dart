@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:one_step_app_flutter/screens/HomeDashboardScreen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:one_step_app_flutter/screens/step_creation_screen.dart';
 import 'package:one_step_app_flutter/environment.dart';
 
@@ -114,8 +114,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   }
 
   void _navigateToHomeDashboard(){
-    Navigator.push(context, 
-      MaterialPageRoute(builder: (context) => HomeDashboardScreen()));
+    context.go('/dashboard');
   }
 
   Future<void> _generateStepFromAI() async {
@@ -222,9 +221,7 @@ Widget _buildRectBox(String label, String value) {
         automaticallyImplyLeading: false,
         leading: IconButton(icon: const Icon(Icons.home_filled),
         onPressed: () {
-          Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeDashboardScreen()),
-            );
+          context.go('/dashboard');
           },
         ),
         backgroundColor: const Color(0xff1d2528),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:one_step_app_flutter/screens/HomeDashboardScreen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:one_step_app_flutter/environment.dart';
 
 
@@ -78,10 +78,7 @@ void _submitForm() async {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registration successful')),
       );
-      Navigator.pushReplacement(
-        context, 
-        MaterialPageRoute(builder: (context) => const HomeDashboardScreen()),
-      );
+      context.go('/dashboard');
     } else if(mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registration failed')),
@@ -104,9 +101,7 @@ void _submitForm() async {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-        Navigator.pop(context);
-          },
+          onPressed: () => context.go('/'),
         ),
       ),
       body: isMobile

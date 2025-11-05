@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthSelectionScreen extends StatelessWidget {
   const AuthSelectionScreen({super.key});
@@ -45,7 +46,7 @@ class AuthSelectionScreen extends StatelessWidget {
                                 context: context,
                                 label: 'Login',
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/login');
+                                  context.go('/login');
                                 },
                               ),
                               const SizedBox(height: 24),
@@ -53,7 +54,7 @@ class AuthSelectionScreen extends StatelessWidget {
                                 context: context,
                                 label: 'Register',
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/register');
+                                  context.go('/register');
                                 },
                               ),
                             ],
@@ -95,7 +96,7 @@ class AuthSelectionScreen extends StatelessWidget {
                               context: context,
                               label: 'Login',
                               onPressed: () {
-                                Navigator.pushNamed(context, '/login');
+                                context.go('/login');
                               },
                             ),
                             const SizedBox(height: 32),
@@ -103,7 +104,7 @@ class AuthSelectionScreen extends StatelessWidget {
                               context: context,
                               label: 'Register',
                               onPressed: () {
-                                Navigator.pushNamed(context, '/register');
+                                context.go('/register');
                               },
                             ),
                           ],

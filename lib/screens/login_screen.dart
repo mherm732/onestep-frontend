@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:one_step_app_flutter/screens/HomeDashboardScreen.dart';
-import 'package:one_step_app_flutter/screens/register_login_selection.dart';
+import 'package:go_router/go_router.dart';
 import 'package:one_step_app_flutter/environment.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -64,10 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login successful')),
         );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeDashboardScreen()),
-        );
+        context.go('/dashboard');
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login failed')),
@@ -87,8 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => AuthSelectionScreen())),
+          onPressed: () => context.go('/'),
         ),
       ),
       body: isMobile

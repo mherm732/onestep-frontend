@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:one_step_app_flutter/screens/goal_details_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:one_step_app_flutter/screens/progress_screen.dart';
 import 'GoalCreationScreen.dart';
 import '../widgets/appbar_with_logout.dart';
@@ -269,15 +269,8 @@ Widget build(BuildContext context) {
         return;
       }
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GoalDetailsScreen(
-            goalId: goalId,
-            goalTitle: goalTitle,
-            goalDescription: goalDescription,
-          ),
-        ),
+      context.go(
+        '/goals/$goalId?title=${Uri.encodeComponent(goalTitle)}&description=${Uri.encodeComponent(goalDescription)}',
       );
     },
     child: Container(
